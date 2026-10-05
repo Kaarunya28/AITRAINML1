@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: smartcart
+    runtime: python
+    buildCommand: "pip install -r requirements.txt && python data/generate_data.py && python data/clean_and_eda.py && python ml/train_models.py && python seed_db.py"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: SECRET_KEY
+        value: smartcart-secret-key-render-2024
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "60"
+      - key: DATABASE_URL
+        value: sqlite:///./smartcart.db
+      - key: PYTHON_VERSION
+        value: "3.11.0"
